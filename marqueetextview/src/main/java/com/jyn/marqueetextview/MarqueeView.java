@@ -126,10 +126,10 @@ public class MarqueeView extends HorizontalScrollView {
         TextView textView = new TextView(getContext());
         textView.setPadding(0, 0, 0, 0);
         textView.setSingleLine();
-        textView.setTextColor(Color.parseColor("#FFFFFF"));
+        textView.setTextColor(Color.parseColor("#000000"));
         LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         textView.setLayoutParams(layoutParams);
-        textView.setGravity(Gravity.CENTER_VERTICAL);//水平居中
+        textView.setGravity(Gravity.CENTER_VERTICAL);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         return textView;
     }
@@ -198,8 +198,8 @@ public class MarqueeView extends HorizontalScrollView {
                         }
                         break;
                     case XmlPullParser.END_TAG:
-
                         break;
+                    default:
                 }
                 event = pullParser.next();
             }
@@ -226,7 +226,7 @@ public class MarqueeView extends HorizontalScrollView {
         if (str instanceof Spannable) {
             int end = str.length();
             Spannable sp = (Spannable) str;
-            URLSpan[] urls = sp.getSpans(0, end, URLSpan.class);  //找出text中的a标签
+            URLSpan[] urls = sp.getSpans(0, end, URLSpan.class);
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(str);
             spannableStringBuilder.clearSpans();
             spannableStringBuilder.setSpan(new ForegroundColorSpan(Color.parseColor("#FFFFFF")), 0, mText.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
