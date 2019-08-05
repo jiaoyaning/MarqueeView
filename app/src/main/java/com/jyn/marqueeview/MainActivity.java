@@ -18,5 +18,8 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         MarqueeView marqueeView = findViewById(R.id.marquee);
         marqueeView.setText("东风夜放花千树，更吹落星如雨，宝马雕车香满路，凤箫声动，玉壶光转，一夜鱼龙舞。");
+
+        MarqueeView marqueeView2 = findViewById(R.id.marquee2);
+        marqueeView2.setText("东风夜放花千树，更吹落星如雨，宝马雕车香满路，凤箫声动，玉壶光转，一夜鱼龙舞。");
     }
 }
