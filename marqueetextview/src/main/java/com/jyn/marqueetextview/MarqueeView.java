@@ -80,11 +80,17 @@ public class MarqueeView extends HorizontalScrollView {
     private void initAttrs(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MarqueeView);
         textColor = typedArray.getColor(R.styleable.MarqueeView_textColor, textColor);
-//        textSize = typedArray.getDimensionPixelSize(R.styleable.MarqueeView_textSize, 15);
         if (typedArray.hasValue(R.styleable.MarqueeView_textSize)) {
             textSize = (int) typedArray.getDimension(R.styleable.MarqueeView_textSize, textSize);
             textSize = px2sp(context, textSize);
+        }
 
+        if (typedArray.hasValue(R.styleable.MarqueeView_spacing)) {
+            spacing = (int) typedArray.getDimension(R.styleable.MarqueeView_spacing, spacing);
+        }
+
+        if (typedArray.hasValue(R.styleable.MarqueeView_speed)) {
+            speed = (int) typedArray.getInteger(R.styleable.MarqueeView_speed, 2);
         }
     }
 
