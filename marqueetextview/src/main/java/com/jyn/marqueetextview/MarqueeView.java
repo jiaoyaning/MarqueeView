@@ -3,6 +3,7 @@ package com.jyn.marqueetextview;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.text.Html;
@@ -15,6 +16,7 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.util.Xml;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -34,13 +36,14 @@ import java.util.regex.Pattern;
 /**
  * Created by jiao on 2019/7/31.
  */
-public class MarqueeView extends FrameLayout {
+public class MarqueeView extends HorizontalScrollView {
 
     private TextView mTextView;
     private TextView mGhostTextView;
 
     private CharSequence mText;
     private int measureText;
+    private int textColor = 0xff000000;
 
     private int mOffset = 0;
     private int mGhostOffset = 0;
@@ -56,6 +59,7 @@ public class MarqueeView extends FrameLayout {
     private int speed = 1;
 
     private ValueAnimator valueAnimator;
+    private int textSize = 14;
 
     public MarqueeView(Context context) {
         this(context, null);
@@ -67,19 +71,32 @@ public class MarqueeView extends FrameLayout {
 
     public MarqueeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initAttrs(context, attrs);
         initLayout();
         initAnim();
+    }
+
+    @SuppressLint("Recycle")
+    private void initAttrs(Context context, AttributeSet attrs) {
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MarqueeView);
+        textColor = typedArray.getColor(R.styleable.MarqueeView_textColor, textColor);
+//        textSize = typedArray.getDimensionPixelSize(R.styleable.MarqueeView_textSize, 15);
+        if (typedArray.hasValue(R.styleable.MarqueeView_textSize)) {
+            textSize = (int) typedArray.getDimension(R.styleable.MarqueeView_textSize, textSize);
+            textSize = px2sp(context, textSize);
+
+        }
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        for (int i = 0; i < getChildCount(); i++) {
-            View view = getChildAt(i);
-            final int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(
-                    measureText, MeasureSpec.EXACTLY);
-            view.measure(childWidthMeasureSpec, view.getMeasuredHeight());
-        }
+//        for (int i = 0; i < getChildCount(); i++) {
+//            View view = getChildAt(i);
+//            final int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(
+//                    measureText, MeasureSpec.EXACTLY);
+//            view.measure(childWidthMeasureSpec, view.getMeasuredHeight());
+//        }
     }
 
     @Override
@@ -101,7 +118,6 @@ public class MarqueeView extends FrameLayout {
 
         relativeLayout.addView(mTextView);
         relativeLayout.addView(mGhostTextView);
-
     }
 
     private void initAnim() {
@@ -120,9 +136,12 @@ public class MarqueeView extends FrameLayout {
     }
 
     public void setText(CharSequence text) {
-        this.mText = fromHtml(text.toString());
-        buildMsgText(mTextView);
-        buildMsgText(mGhostTextView);
+        this.mText = text;
+//        buildMsgText(mTextView);
+//        buildMsgText(mGhostTextView);
+        mTextView.setText(mText);
+        mGhostTextView.setText(mText);
+
         measureText = (int) mTextView.getPaint().measureText(mText, 0, mText.length());
         mOffset = 0;
         mGhostOffset = measureText + spacing;
@@ -133,7 +152,8 @@ public class MarqueeView extends FrameLayout {
         TextView textView = new TextView(getContext());
         textView.setPadding(0, 0, 0, 0);
         textView.setSingleLine();
-        textView.setTextColor(Color.parseColor("#000000"));
+        textView.setTextColor(textColor);
+
         LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         textView.setLayoutParams(layoutParams);
         textView.setGravity(Gravity.CENTER_VERTICAL);
@@ -164,6 +184,13 @@ public class MarqueeView extends FrameLayout {
             invalidate();
         }
     };
+
+
+    // 将px值转换为sp值
+    public static int px2sp(Context context, float pxValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (pxValue / fontScale + 0.5f);
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -236,7 +263,7 @@ public class MarqueeView extends FrameLayout {
             URLSpan[] urls = sp.getSpans(0, end, URLSpan.class);
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(str);
             spannableStringBuilder.clearSpans();
-            spannableStringBuilder.setSpan(new ForegroundColorSpan(Color.parseColor("#FFFFFF")), 0, mText.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            spannableStringBuilder.setSpan(new ForegroundColorSpan(Color.parseColor("#000000")), 0, mText.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 //            spannableStringBuilder.setSpan(new ForegroundColorSpan(Color.parseColor("#FFFB00")), mText.length(), titelStr.length() + nameStr.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             for (URLSpan url : urls) {
                 String jumpUrl = url.getURL();
