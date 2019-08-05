@@ -19,6 +19,7 @@ import android.util.Xml;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,7 +34,7 @@ import java.util.regex.Pattern;
 /**
  * Created by jiao on 2019/7/31.
  */
-public class MarqueeView extends HorizontalScrollView {
+public class MarqueeView extends FrameLayout {
 
     private TextView mTextView;
     private TextView mGhostTextView;
@@ -73,6 +74,12 @@ public class MarqueeView extends HorizontalScrollView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        for (int i = 0; i < getChildCount(); i++) {
+            View view = getChildAt(i);
+            final int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(
+                    measureText, MeasureSpec.EXACTLY);
+            view.measure(childWidthMeasureSpec, view.getMeasuredHeight());
+        }
     }
 
     @Override
