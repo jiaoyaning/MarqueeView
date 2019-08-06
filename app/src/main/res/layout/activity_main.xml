@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,22 +11,82 @@
         android:id="@+id/marquee"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="20dp"
+        android:background="@drawable/view_bg_gradient"
         app:spacing="100dp"
-        app:speed="4"
+        app:speed="1"
+        app:textColor="@android:color/white"
         app:textSize="15sp">
 
     </com.jyn.marqueetextview.MarqueeView>
 
-
-    <com.jyn.marqueetextview.MarqueeView
-        android:id="@+id/marquee2"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:spacing="10dp"
-        app:textColor="@color/colorAccent"
-        app:speed="3"
-        app:textSize="15sp">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/marquee"
+        android:layout_marginTop="20dp"
+        android:padding="10dp">
 
-    </com.jyn.marqueetextview.MarqueeView>
-</LinearLayout>
+        <TextView
+            android:id="@+id/speed_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="速度：1"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/spacing_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="间隔：100"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/speed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/marquee"
+        android:layout_marginTop="70dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="速度:"
+            android:textSize="18sp" />
+
+        <SeekBar
+            android:id="@+id/speed_seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="10"
+            android:progress="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/spacing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/speed"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="间距:"
+            android:textSize="18sp" />
+
+        <SeekBar
+            android:id="@+id/spacing_seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="1000"
+            android:progress="100" />
+    </LinearLayout>
+</RelativeLayout>
