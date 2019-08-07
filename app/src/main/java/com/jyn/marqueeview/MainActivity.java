@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
             speed_text.setText("速度：" + i);
             marqueeView.setSpeed(i);
         } else if (seekBar == spacing_seekbar) {
-            speed_text.setText("间隔：" + i);
+            spacing_text.setText("间隔：" + i);
             marqueeView.setSpacing(i);
         }
     }

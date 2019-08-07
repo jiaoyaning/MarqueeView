@@ -168,12 +168,16 @@ public class MarqueeView extends HorizontalScrollView {
     }
 
     public void startAnim() {
-        valueAnimator.setDuration((long) measureText);
+        if (valueAnimator == null) {
+            initAnim();
+        }
         valueAnimator.start();
     }
 
     public void stopAnim() {
-        valueAnimator.clone();
+        if (valueAnimator != null) {
+            valueAnimator.clone();
+        }
     }
 
     ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {

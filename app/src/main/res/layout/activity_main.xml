@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@drawable/view_bg_gradient"
-        app:spacing="100dp"
+        app:spacing="0dp"
         app:speed="1"
         app:textColor="@android:color/white"
         app:textSize="15sp">
