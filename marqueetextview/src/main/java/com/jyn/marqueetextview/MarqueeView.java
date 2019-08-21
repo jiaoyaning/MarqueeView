@@ -41,6 +41,8 @@ public class MarqueeView extends HorizontalScrollView {
     private TextView mTextView;
     private TextView mGhostTextView;
 
+    private int viewWidth;
+
     private CharSequence mText;
     private int measureText;
     private int textColor = 0xff000000;
@@ -97,19 +99,16 @@ public class MarqueeView extends HorizontalScrollView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//        for (int i = 0; i < getChildCount(); i++) {
-//            View view = getChildAt(i);
-//            final int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(
-//                    measureText, MeasureSpec.EXACTLY);
-//            view.measure(childWidthMeasureSpec, view.getMeasuredHeight());
-//        }
+        viewWidth = getMeasuredWidth();
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if (measureText > w) {
+        if (measureText > viewWidth) {
             startAnim();
+        } else {
+            stopAnim();
         }
     }
 
@@ -130,7 +129,7 @@ public class MarqueeView extends HorizontalScrollView {
         valueAnimator = ValueAnimator.ofFloat(0, measureText);
         valueAnimator.addUpdateListener(animatorUpdateListener);
         valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        valueAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        valueAnimator.setRepeatMode(ValueAnimator.RESTART);
     }
 
     public void setSpacing(int spacing) {
@@ -149,9 +148,12 @@ public class MarqueeView extends HorizontalScrollView {
         mGhostTextView.setText(mText);
 
         measureText = (int) mTextView.getPaint().measureText(mText, 0, mText.length());
-        mOffset = 0;
-        mGhostOffset = measureText + spacing;
-        mGhostTextView.setX(mGhostOffset);
+        resetMarqueeView();
+        if (measureText > viewWidth) {
+            startAnim();
+        } else {
+            stopAnim();
+        }
     }
 
     private TextView createTextView() {
@@ -167,18 +169,24 @@ public class MarqueeView extends HorizontalScrollView {
         return textView;
     }
 
+    private void resetMarqueeView() {
+        mOffset = 0;
+        mGhostOffset = measureText + spacing;
+        mGhostTextView.setX(mGhostOffset);
+        invalidate();
+    }
+
     public void startAnim() {
-        if (valueAnimator == null) {
-            initAnim();
-        }
+        valueAnimator.setDuration((long) measureText);
+        stopAnim();
         valueAnimator.start();
     }
 
     public void stopAnim() {
-        if (valueAnimator != null) {
-            valueAnimator.clone();
-        }
+        valueAnimator.cancel();
+        resetMarqueeView();
     }
+
 
     ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
